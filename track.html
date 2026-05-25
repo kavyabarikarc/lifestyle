@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+<title>Kavu Lifestyle Tracker</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
+body{
+background:linear-gradient(180deg,#ffeef4,#fff8f1);
+display:flex;
+justify-content:center;
+min-height:100vh;
+overflow-x:hidden;
+}
+
+.container{
+width:100%;
+max-width:458px;
+padding:16px 16px 100px;
+position:relative;
+}
+
+.page-section{
+display:none;
+animation:fade 0.4s ease;
+}
+
+.page-section.active{
+display:block;
+}
+
+@keyframes fade{
+from{
+opacity:0;
+transform:translateY(20px);
+}
+to{
+opacity:1;
+transform:translateY(0);
+}
+}
+
+.header{
+background:linear-gradient(135deg,#ff6b9a,#ff9472);
+padding:24px;
+border-radius:28px;
+color:white;
+margin-bottom:18px;
+box-shadow:0 10px 25px rgba(255,105,135,0.25);
+}
+
+.header h1{
+font-size:28px;
+margin-bottom:10px;
+}
+
+.header p{
+font-size:14px;
+line-height:1.6;
+opacity:0.95;
+}
+
+.card{
+background:white;
+padding:18px;
+border-radius:24px;
+margin-bottom:16px;
+box-shadow:0 6px 18px rgba(0,0,0,0.06);
+transition:0.3s;
+}
+
+.card:hover{
+transform:translateY(-4px);
+}
+
+.section-title{
+font-size:20px;
+font-weight:600;
+margin-bottom:16px;
+color:#444;
+}
+
+.goal-grid{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:12px;
+margin-top:14px;
+}
+
+.goal-box{
+background:#fff4f8;
+padding:14px;
+border-radius:18px;
+text-align:center;
+font-size:14px;
+font-weight:500;
+color:#555;
+}
+
+.goal-box h2{
+color:#ff5f8f;
+margin-bottom:5px;
+}
+
+.goal-box span{
+font-size:13px;
+color:#666;
+}
+
+.progress-bar{
+height:14px;
+background:#eee;
+border-radius:30px;
+overflow:hidden;
+margin-top:14px;
+}
+
+.progress{
+height:100%;
+width:75%;
+background:linear-gradient(90deg,#ff6b9a,#ff9472);
+animation:fill 2s ease;
+border-radius:30px;
+}
+
+@keyframes fill{
+from{
+width:0;
+}
+to{
+width:75%;
+}
+}
+
+.routine-grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:14px;
+}
+
+.route-card{
+padding:18px;
+border-radius:22px;
+background:#fff4f8;
+text-align:center;
+transition:0.3s;
+}
+
+.route-card:hover{
+transform:translateY(-4px);
+}
+
+.route-card.green{
+background:#f2fff5;
+}
+
+.route-card.orange{
+background:#fff8ef;
+}
+
+.route-card.blue{
+background:#eef7ff;
+}
+
+.route-card h3{
+margin-top:10px;
+font-size:17px;
+}
+
+.route-card p{
+font-size:13px;
+color:#666;
+margin-top:8px;
+line-height:1.5;
+}
+
+.route-card button{
+margin-top:14px;
+width:100%;
+padding:10px;
+border:none;
+border-radius:14px;
+background:linear-gradient(135deg,#ff6b9a,#ff9472);
+color:white;
+font-weight:600;
+cursor:pointer;
+}
+
+.route-card.green button{
+background:linear-gradient(135deg,#49c56b,#86e39d);
+}
+
+.route-card.orange button{
+background:linear-gradient(135deg,#ff9472,#ffb347);
+}
+
+.route-card.blue button{
+background:linear-gradient(135deg,#4b7bec,#6ea8ff);
+}
+
+.check-item{
+display:flex;
+justify-content:space-between;
+align-items:center;
+background:#fff7fb;
+padding:14px;
+border-radius:18px;
+margin-bottom:12px;
+transition:0.3s;
+}
+
+.check-item:hover{
+transform:scale(1.02);
+background:#fff1f6;
+}
+
+.check-left{
+display:flex;
+align-items:center;
+gap:12px;
+}
+
+.check-item input{
+width:22px;
+height:22px;
+accent-color:#ff5f8f;
+cursor:pointer;
+}
+
+.back-btn{
+display:flex;
+align-items:center;
+gap:8px;
+font-size:18px;
+font-weight:600;
+color:#ff5f8f;
+cursor:pointer;
+margin-bottom:18px;
+}
+
+.back-btn span{
+font-size:24px;
+line-height:1;
+}
+
+.bottom-nav{
+position:fixed;
+bottom:0;
+width:100%;
+max-width:430px;
+background:white;
+display:flex;
+justify-content:space-around;
+padding:12px 6px;
+border-top-left-radius:26px;
+border-top-right-radius:26px;
+box-shadow:0 -5px 20px rgba(0,0,0,0.08);
+z-index:1000;
+}
+
+.bottom-nav button{
+border:none;
+background:none;
+color:#ff5f8f;
+font-weight:600;
+font-size:13px;
+cursor:pointer;
+display:flex;
+flex-direction:column;
+align-items:center;
+gap:4px;
+}
+
+.footer{
+text-align:center;
+font-size:13px;
+color:#777;
+padding:12px;
+}
+
+@media(max-width:480px){
+
+.goal-grid{
+grid-template-columns:1fr;
+}
+
+.routine-grid{
+grid-template-columns:1fr;
+}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<!-- HOME -->
+
+<div id="home" class="page-section active">
+
+<div class="header">
+<h1>✨ Kavu's Fitness Journey</h1>
+
+<p>
+Healthy lifestyle plan to reduce weight,
+improve fitness, productivity and consistency.
+</p>
+</div>
+
+<!-- GOAL -->
+
+<div class="card">
+
+<div class="section-title">
+🎯 Goal Overview
+</div>
+
+<div class="goal-grid">
+
+<div class="goal-box">
+<h2>54kg</h2>
+<span>Current</span>
+</div>
+
+<div class="goal-box">
+<h2>50kg</h2>
+<span>Target</span>
+</div>
+
+<div class="goal-box">
+<h2>3M</h2>
+<span>Duration</span>
+</div>
+
+</div>
+
+<div style="margin-top:16px;">
+
+<small style="color:#666;">
+Progress Goal
+</small>
+
+<div class="progress-bar">
+<div class="progress"></div>
+</div>
+
+</div>
+
+</div>
+
+<!-- ROUTING CARDS -->
+
+<div class="card">
+
+<div class="section-title">
+🌸 My Routines
+</div>
+
+<div class="routine-grid">
+
+<!-- DAILY -->
+
+<div class="route-card">
+
+<div style="font-size:45px;">📋</div>
+
+<h3 style="color:#ff5f8f;">
+Daily Routine
+</h3>
+
+<p>
+Track healthy and productive daily habits.
+</p>
+
+<button onclick="showSection('routine')">
+Open Routine
+</button>
+
+</div>
+
+<!-- WEEKEND -->
+
+<div class="route-card green">
+
+<div style="font-size:45px;">🌿</div>
+
+<h3 style="color:#37a85a;">
+Weekend Routine
+</h3>
+
+<p>
+Relax, recharge and enjoy weekends.
+</p>
+
+<button onclick="showSection('weekend')">
+Open Weekend
+</button>
+
+</div>
+
+<!-- FOCUS PLAN -->
+
+<div class="route-card orange">
+
+<div style="font-size:45px;">🔥</div>
+
+<h3 style="color:#ff9472;">
+Focus Plan
+</h3>
+
+<p>
+Weight loss focus plan with healthy food and Surya Namaskar.
+</p>
+
+<button onclick="showSection('focusPlan')">
+Open Plan
+</button>
+
+</div>
+
+<!-- SKILLS -->
+
+<div class="route-card blue">
+
+<div style="font-size:45px;">💻</div>
+
+<h3 style="color:#4b7bec;">
+Skill Growth
+</h3>
+
+<p>
+Track skills, projects and UI learning progress.
+</p>
+
+<button onclick="showSection('skills')">
+Open Skills
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="footer">
+✨ Care for a healthy & happy lifestyle
+</div>
+
+</div>
+
+<!-- DAILY ROUTINE -->
+
+<div id="routine" class="page-section">
+
+<div class="back-btn" onclick="showSection('home')">
+<span>←</span>
+Back to Home
+</div>
+
+<div class="card">
+
+<div class="section-title">
+📋 Daily Routine
+</div>
+
+<div class="check-item"><div class="check-left"><input type="checkbox"><span>5:30 Wakeup & Freshup</span></div><span>⏰</span></div>
+
+<div class="check-item"><div class="check-left"><input type="checkbox"><span>6:00 - 6:30 Yoga</span></div><span>🧘</span></div>
+
+<div class="check-item"><div class="check-left"><input type="checkbox"><span>6:30 - 7:00 Healthy Drinks</span></div><span>🥤</span></div>
+
+<div class="check-item"><div class="check-left"><input type="checkbox"><span>7:00 - 8:00 Technology Skills</span></div><span>💻</span></div>
+
+<div class="check-item"><div class="check-left"><input type="checkbox"><span>8:00 - 8:30 Bath & Worship</span></div><span>🛁</span></div>
+
+<div class="check-item"><div class="check-left"><input type="checkbox"><span>8:00 - 9:00 Breakfast & Ready for Office</span></div><span>🍽️</span></div>
+
+<div class="check-item"><div class="check-left"><input type="checkbox"><span>9:00 - 7:00 Office Time</span></div><span>🏢</span></div>
+
+<div class="check-item"><div class="check-left"><input type="checkbox"><span>7:00 - 8:00 Freshup & Rest</span></div><span>🌙</span></div>
+
+<div class="check-item"><div class="check-left"><input type="checkbox"><span>8:00 - 9:00 Food & Other Things</span></div><span>🍲</span></div>
+
+<div class="check-item"><div class="check-left"><input type="checkbox"><span>9:00 - 10:00 Technology & Skills</span></div><span>📚</span></div>
+
+<div class="check-item"><div class="check-left"><input type="checkbox"><span>10:00 - 10:30 Books</span></div><span>📖</span></div>
+
+<div class="check-item"><div class="check-left"><input type="checkbox"><span>10:30 Sleep</span></div><span>😴</span></div>
+
+</div>
+
+</div>
+
+<!-- WEEKEND -->
+
+<div id="weekend" class="page-section">
+
+<div class="back-btn" onclick="showSection('home')">
+<span>←</span>
+Back to Home
+</div>
+
+<div class="card">
+
+<div class="section-title">
+🌿 Weekend Routine
+</div>
+
+<div class="check-item"><div class="check-left"><input type="checkbox"><span>Nature Walk</span></div><span>🚶</span></div>
+
+<div class="check-item"><div class="check-left"><input type="checkbox"><span>Movie & Entertainment</span></div><span>🎬</span></div>
+
+<div class="check-item"><div class="check-left"><input type="checkbox"><span>Day Out</span></div><span>🗺️</span></div>
+
+<div class="check-item"><div class="check-left"><input type="checkbox"><span>Time with Family & Friends</span></div><span>👨‍👩‍👧</span></div>
+
+<div class="check-item"><div class="check-left"><input type="checkbox"><span>Learn Any Hobbies</span></div><span>🎨</span></div>
+
+<div class="check-item"><div class="check-left"><input type="checkbox"><span>Cooking</span></div><span>👩‍🍳</span></div>
+
+<div class="check-item"><div class="check-left"><input type="checkbox"><span>Trekking</span></div><span>⛰️</span></div>
+
+</div>
+
+</div>
+
+<!-- FOCUS PLAN -->
+
+<div id="focusPlan" class="page-section">
+
+<div class="back-btn" onclick="showSection('home')">
+<span>←</span>
+Back to Home
+</div>
+
+<div class="card">
+
+<div class="section-title">
+🔥 One Month Focus Plan
+</div>
+
+<div class="check-item"><div class="check-left"><input type="checkbox"><span>Strict Diet Control</span></div><span>🥗</span></div>
+
+<div class="check-item"><div class="check-left"><input type="checkbox"><span>Daily Surya Namaskar</span></div><span>🧘</span></div>
+
+<div class="check-item"><div class="check-left"><input type="checkbox"><span>Good Sleep</span></div><span>😴</span></div>
+
+<div class="check-item"><div class="check-left"><input type="checkbox"><span>No Junk Food / Sugar</span></div><span>🚫</span></div>
+
+</div>
+
+</div>
+
+<!-- SKILLS -->
+
+<div id="skills" class="page-section">
+
+<div class="back-btn" onclick="showSection('home')">
+<span>←</span>
+Back to Home
+</div>
+
+<div class="card">
+
+<div class="section-title">
+💻 Skill Growth Tracker
+</div>
+
+<div class="check-item"><div class="check-left"><input type="checkbox"><span>HTML</span></div><span>🌐</span></div>
+
+<div class="check-item"><div class="check-left"><input type="checkbox"><span>CSS</span></div><span>🎨</span></div>
+
+<div class="check-item"><div class="check-left"><input type="checkbox"><span>JavaScript</span></div><span>⚡</span></div>
+
+<div class="check-item"><div class="check-left"><input type="checkbox"><span>GitHub</span></div><span>🐙</span></div>
+
+<div class="check-item"><div class="check-left"><input type="checkbox"><span>Website Development</span></div><span>💻</span></div>
+
+<div class="check-item"><div class="check-left"><input type="checkbox"><span>Self Projects</span></div><span>🚀</span></div>
+
+<div class="check-item"><div class="check-left"><input type="checkbox"><span>Mobile UI Design</span></div><span>📱</span></div>
+
+<div class="check-item"><div class="check-left"><input type="checkbox"><span>UI / UX</span></div><span>✨</span></div>
+
+<div class="check-item"><div class="check-left"><input type="checkbox"><span>Cloud</span></div><span>☁️</span></div>
+
+<div class="check-item"><div class="check-left"><input type="checkbox"><span>Copilot</span></div><span>🤖</span></div>
+
+<div class="check-item"><div class="check-left"><input type="checkbox"><span>Prompt Tools</span></div><span>🧠</span></div>
+
+</div>
+
+</div>
+
+<!-- BOTTOM NAV -->
+
+<div class="bottom-nav">
+
+<button onclick="showSection('home')">
+🏠
+Home
+</button>
+
+<button onclick="showSection('routine')">
+📋
+Daily
+</button>
+
+<button onclick="showSection('weekend')">
+🌿
+Weekend
+</button>
+
+<button onclick="showSection('focusPlan')">
+🔥
+Plan
+</button>
+
+<button onclick="showSection('skills')">
+💻
+Skills
+</button>
+
+</div>
+
+<script>
+
+function showSection(id){
+
+document.querySelectorAll('.page-section')
+.forEach(section=>{
+section.classList.remove('active');
+});
+
+document.getElementById(id)
+.classList.add('active');
+
+window.scrollTo({
+top:0,
+behavior:'smooth'
+});
+
+}
+
+</script>
+
+</body>
+</html>
